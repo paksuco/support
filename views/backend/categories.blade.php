@@ -4,14 +4,14 @@
     <div class="w-full items-end">
         <div class="flex">
             <div class="w-2/3">
-                <h2 class="text-3xl font-semibold mb-3" style="line-height: 1em">@lang("Common Questions & Answers")</h2>
+                <h2 class="text-3xl font-semibold mb-3" style="line-height: 1em">@lang("FAQ Categories")</h2>
             </div>
             <div class="w-1/3 text-right">
-                <a href="{{route('paksuco.faq.create')}}"
+                <a href="{{route('paksuco.faqcategory.create')}}"
                 class="shadow bg-indigo-500 hover:bg-indigo-400 whitespace-no-wrap
                 focus:shadow-outline focus:outline-none text-white font-normal
                 py-2 px-3 rounded">
-                    <i class="fa fa-plus mr-2"></i>@lang("Create a new FAQ Item")
+                    <i class="fa fa-plus mr-2"></i>@lang("Create a new FAQ Category")
                 </a>
             </div>
         </div>
@@ -26,41 +26,30 @@
             <thead>
                 <tr class="border-b bg-cool-gray-100">
                     <th class="text-left whitespace-no-wrap text-sm uppercase font-semibold p-2 px-4">Category</th>
-                    <th class="text-left whitespace-no-wrap text-sm uppercase font-semibold p-2 px-4">Title</th>
-                    <th class="text-left whitespace-no-wrap text-sm uppercase font-semibold p-2 px-4">Excerpt</th>
-                    <th class="text-left whitespace-no-wrap text-sm uppercase font-semibold p-2 px-4">Likes</th>
-                    <th class="text-left whitespace-no-wrap text-sm uppercase font-semibold p-2 px-4">Dislikes</th>
-                    <th class="text-left whitespace-no-wrap text-sm uppercase font-semibold p-2 px-4">Views</th>
-                    <th class="text-left whitespace-no-wrap text-sm uppercase font-semibold p-2 px-4">Published?</th>
+                    <th class="text-left whitespace-no-wrap text-sm uppercase font-semibold p-2 px-4">Parent</th>
+                    <th class="text-left whitespace-no-wrap text-sm uppercase font-semibold p-2 px-4">Post Count</th>
                     <th class="text-left whitespace-no-wrap text-sm uppercase font-semibold p-2 px-4">Updated At</th>
                     <th class="text-left whitespace-no-wrap text-sm uppercase font-semibold p-2 px-4">Created At</th>
                     <th class="text-right whitespace-no-wrap text-sm uppercase font-semibold p-2 px-4">Actions</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach ($faqs as $faq)
+                @foreach ($faq_categories as $category)
                 <tr class="border-b hover:bg-indigo-100 bg-white {{$loop->last ? 'rounded-b' : ''}}">
                     <td class="p-3 px-4 whitespace-no-wrap font-semibold {{$loop->last ? 'rounded-bl' : ''}}">
-                        {{$faq->category->title}}</td>
-                    <td class="p-3 px-4 whitespace-no-wrap font-semibold {{$loop->last ? 'rounded-bl' : ''}}">
-                        {{$faq->question}}</td>
-                    <td class="p-3 px-4 w-full whitespace-no-wrap">{{\Illuminate\Support\Str::limit(strip_tags($faq->answer), 200, "...")}}</td>
-                    <td class="p-3 px-4 whitespace-no-wrap">{{$faq->likes}}</td>
-                    <td class="p-3 px-4 whitespace-no-wrap">{{$faq->dislikes}}</td>
-                    <td class="p-3 px-4 whitespace-no-wrap">{{$faq->visits}}</td>
-                    <td class="p-3 px-4 whitespace-no-wrap">{{$faq->published ? "Yes" : "No"}}</td>
-                    <td class="p-3 px-4 whitespace-no-wrap">{{$faq->created_at}}</td>
+                        {{$category->title}}</td>
+                    <td class="p-3 px-4 whitespace-no-wrap {{$loop->last ? 'rounded-bl' : ''}}">
+                        {{$category->parent->title ?? __("(No Parent)")}}</td>
+                    <td class="p-3 px-4 w-full whitespace-no-wrap">{{$category->items()->count()}}</td>
+                    <td class="p-3 px-4 whitespace-no-wrap">{{$category->updated_at ?? ""}}</td>
+                    <td class="p-3 px-4 whitespace-no-wrap">{{$category->created_at}}</td>
                     <td class="p-3 px-4 whitespace-no-wrap text-right flex {{$loop->last ? 'rounded-br' : ''}}">
-                        <a href='{{route("paksuco.faq.show", $faq->id)}}'
-                            class="shadow text-sm bg-gray-500 hover:bg-gray-400
-                        whitespace-no-wrap focus:shadow-outline focus:outline-none
-                        text-white font-semibold py-1 px-2 mr-1 rounded">View</a>
-                        <a href="{{route('paksuco.faq.edit', $faq->id)}}"
+                        <a href="{{route('paksuco.faqcategory.edit', $category->id)}}"
                             class="shadow text-sm bg-blue-500 hover:bg-blue-400
                         whitespace-no-wrap focus:shadow-outline focus:outline-none
                         text-white font-semibold py-1 px-2 mr-1 rounded">Edit</a>
                         <form class="inline"
-                            action="{{route('paksuco.faq.destroy', $faq->id)}}"
+                            action="{{route('paksuco.faqcategory.destroy', $category->id)}}"
                             method="POST">
                             @method("DELETE")
                             @csrf

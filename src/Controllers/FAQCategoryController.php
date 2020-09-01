@@ -5,9 +5,9 @@ namespace Paksuco\Support\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Str;
-use Paksuco\Support\Models\FAQItem;
+use Paksuco\Support\Models\FAQCategory;
 
-class FAQController extends Controller
+class FAQCategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,10 +16,10 @@ class FAQController extends Controller
      */
     public function index()
     {
-        $FAQs = FAQItem::paginate(20);
-        return view("support-ui::backend.index", [
+        $FAQCategories = FAQCategory::paginate(20);
+        return view("support-ui::backend.categories", [
             "extends" => config("support-ui.backend.template_to_extend", "layouts.app"),
-            "faqs" => $FAQs,
+            "faq_categories" => $FAQCategories,
         ]);
     }
 

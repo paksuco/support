@@ -1,7 +1,7 @@
 @extends($extends)
 @section("content")
 <div class="p-8 bg-white border-t">
-    <form method="POST" action="{{$edit ? route('paksuco.pages.update', $page->id) : route('paksuco.pages.store')}}">
+    <form method="POST" action="{{$edit ? route('paksuco.faq.update', $page->id) : route('paksuco.faq.store')}}">
         @if($edit)
         @method("PUT")
         @endif
@@ -10,7 +10,7 @@
             <div class="flex mb-4">
                 <div class="w-2/3">
                     <h2 class="text-3xl font-semibold mb-3" style="line-height: 1em">
-                        {{$edit ? __("Edit Page") : __("Create a new Page")}}
+                        {{$edit ? __("Edit FAQ Item") : __("Create a new FAQ Item")}}
                     </h2>
                 </div>
                 <div class="w-1/3 text-right">
@@ -28,7 +28,7 @@
                             text-white border-red-800">Un-publish</button>
                     @endif
                     <button type="button" class="border px-4 py-2 rounded shadow"
-                        onclick="window.location = '{{route("paksuco.pages.index")}}';">Go Back</button>
+                        onclick="window.location = '{{route("paksuco.faq.index")}}';">Go Back</button>
                 </div>
             </div>
             <input type="text" name="title" placeholder="@lang('Enter Title')"

@@ -7,6 +7,8 @@ use \Illuminate\Database\Eloquent\Model;
 class FAQItem extends Model
 {
 
+    protected $table = "faq_items";
+
     public function getRouteKeyName()
     {
         return "slug";

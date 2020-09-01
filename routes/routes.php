@@ -11,6 +11,10 @@ Route::group([
     'prefix' => config("support-ui.backend.admin_route_prefix", ""),
     'as' => 'paksuco.',
 ], function () {
+    Route::resource('/faq/categories', "\Paksuco\Support\Controllers\FAQCategoryController")
+        ->names("faqcategory")
+        ->middleware(config("support-ui.backend.middleware", []));
+
     Route::resource('/faq', "\Paksuco\Support\Controllers\FAQController")
         ->names("faq")
         ->middleware(config("support-ui.backend.middleware", []));

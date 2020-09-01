@@ -33,7 +33,7 @@ class CreateSupportTables extends Migration
             $table->string("question", 100);
             $table->string("slug", 100);
             $table->text("answer");
-            $table->boolean("visible_on_front")->default(false);
+            $table->boolean("published")->default(false);
             $table->integer("order");
             $table->integer("likes");
             $table->integer("dislikes");
