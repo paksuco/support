@@ -17,9 +17,9 @@ class CreateSupportTables extends Migration
             $table->bigIncrements('id');
             $table->string("title");
             $table->string("slug");
+            $table->text("description")->nullable();
             $table->foreignId("parent_id")->nullable();
             $table->integer("order");
-            $table->boolean("is_general")->default(0);
             $table->timestamps();
             $table->softDeletes();
 

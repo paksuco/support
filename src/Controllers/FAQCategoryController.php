@@ -30,10 +30,7 @@ class FAQCategoryController extends Controller
      */
     public function create()
     {
-        return view("support-ui::backend.form", [
-            "extends" => config("support-ui.backend.template_to_extend", "layouts.app"),
-            "edit" => false,
-        ]);
+        // not implemented
     }
 
     /**
@@ -46,20 +43,19 @@ class FAQCategoryController extends Controller
     {
         $request->validate([
             "title" => "required|filled",
-            "content" => "required|filled",
-            "category_id" => "required|filled",
-            "publish" => "required|filled",
+            "parent" => "present|nullable",
         ]);
 
-        $faq = new FAQItem();
-        $faq->faq_title = $request->title;
-        $faq->faq_content = $request->content;
-        $faq->faq_slug = Str::slug($request->title);
-        $faq->faq_excerpt = Str::limit($request->content, 200, '...');
-        $faq->published = $request->publish == "1" ? true : false;
-        $faq->save();
+        $category = new FAQCategory();
+        $category->title = $request->title;
+        $category->slug = Str::slug($request->title);
+        $category->description = $request->description;
+        $category->order = 0;
+        $category->parent_id = $request->parent ?? null;
+        $category->save();
 
-        return redirect()->route("paksuco.faqs.index")->with("status", "success");
+        return redirect()->route("paksuco.faqcategory.index")
+            ->with("status", "FAQ Category successfully created.");
     }
 
     /**
