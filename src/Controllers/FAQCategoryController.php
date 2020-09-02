@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Str;
 use Paksuco\Support\Models\FAQCategory;
+use Paksuco\Support\Models\FAQItem;
 
 class FAQCategoryController extends Controller
 {
@@ -17,9 +18,10 @@ class FAQCategoryController extends Controller
     public function index()
     {
         $FAQCategories = FAQCategory::paginate(20);
+
         return view("support-ui::backend.categories", [
             "extends" => config("support-ui.backend.template_to_extend", "layouts.app"),
-            "faq_categories" => $FAQCategories,
+            "faq_categories" => $FAQCategories
         ]);
     }
 
@@ -87,7 +89,7 @@ class FAQCategoryController extends Controller
         return view("support-ui::backend.form", [
             "extends" => config("support-ui.backend.template_to_extend", "layouts.app"),
             "edit" => true,
-            "faq" => $faq
+            "faq" => $faq,
         ]);
     }
 
