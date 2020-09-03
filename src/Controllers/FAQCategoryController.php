@@ -17,11 +17,8 @@ class FAQCategoryController extends Controller
      */
     public function index()
     {
-        $FAQCategories = FAQCategory::paginate(20);
-
         return view("support-ui::backend.categories", [
             "extends" => config("support-ui.backend.template_to_extend", "layouts.app"),
-            "faq_categories" => $FAQCategories
         ]);
     }
 

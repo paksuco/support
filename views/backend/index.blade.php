@@ -1,6 +1,6 @@
 @extends($extends)
 @section("content")
-<div class="p-8 bg-white border-t">
+<div class="p-8 border-t min-h-screen">
     <div class="w-full items-end">
         <div class="flex">
             <div class="w-2/3">
@@ -21,60 +21,9 @@
             tortor in urna tincidunt vehicula. Integer urna nulla, porttitor ac imperdiet eu, mattis vel lacus.
             Sed et porttitor ex. Morbi pellentesque massa a velit gravida, vitae rutrum tortor consequat. Donec
             interdum lacus ut sem consectetur elementum. Proin pellentesque maximus sem sed rhoncus. Cras eget
-            neque a nisi posuere mollis vitae vitae magna. Praesent non volutpat sem, a maximus libero. </p>
-        <table class="w-full border shadow mb-4">
-            <thead>
-                <tr class="border-b bg-cool-gray-100">
-                    <th class="text-left whitespace-no-wrap text-sm uppercase font-semibold p-2 px-4">Category</th>
-                    <th class="text-left whitespace-no-wrap text-sm uppercase font-semibold p-2 px-4">Title</th>
-                    <th class="text-left whitespace-no-wrap text-sm uppercase font-semibold p-2 px-4">Excerpt</th>
-                    <th class="text-left whitespace-no-wrap text-sm uppercase font-semibold p-2 px-4">Likes</th>
-                    <th class="text-left whitespace-no-wrap text-sm uppercase font-semibold p-2 px-4">Dislikes</th>
-                    <th class="text-left whitespace-no-wrap text-sm uppercase font-semibold p-2 px-4">Views</th>
-                    <th class="text-left whitespace-no-wrap text-sm uppercase font-semibold p-2 px-4">Published?</th>
-                    <th class="text-left whitespace-no-wrap text-sm uppercase font-semibold p-2 px-4">Updated At</th>
-                    <th class="text-left whitespace-no-wrap text-sm uppercase font-semibold p-2 px-4">Created At</th>
-                    <th class="text-right whitespace-no-wrap text-sm uppercase font-semibold p-2 px-4">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($faqs as $faq)
-                <tr class="border-b hover:bg-indigo-100 bg-white {{$loop->last ? 'rounded-b' : ''}}">
-                    <td class="p-3 px-4 whitespace-no-wrap font-semibold {{$loop->last ? 'rounded-bl' : ''}}">
-                        {{$faq->category->title}}</td>
-                    <td class="p-3 px-4 whitespace-no-wrap font-semibold {{$loop->last ? 'rounded-bl' : ''}}">
-                        {{$faq->question}}</td>
-                    <td class="p-3 px-4 w-full whitespace-no-wrap">{{\Illuminate\Support\Str::limit(strip_tags($faq->answer), 200, "...")}}</td>
-                    <td class="p-3 px-4 whitespace-no-wrap">{{$faq->likes}}</td>
-                    <td class="p-3 px-4 whitespace-no-wrap">{{$faq->dislikes}}</td>
-                    <td class="p-3 px-4 whitespace-no-wrap">{{$faq->visits}}</td>
-                    <td class="p-3 px-4 whitespace-no-wrap">{{$faq->published ? "Yes" : "No"}}</td>
-                    <td class="p-3 px-4 whitespace-no-wrap">{{$faq->created_at}}</td>
-                    <td class="p-3 px-4 whitespace-no-wrap text-right flex {{$loop->last ? 'rounded-br' : ''}}">
-                        <a href='{{route("paksuco.faq.show", $faq->id)}}'
-                            class="shadow text-sm bg-gray-500 hover:bg-gray-400
-                        whitespace-no-wrap focus:shadow-outline focus:outline-none
-                        text-white font-semibold py-1 px-2 mr-1 rounded">View</a>
-                        <a href="{{route('paksuco.faq.edit', $faq->id)}}"
-                            class="shadow text-sm bg-blue-500 hover:bg-blue-400
-                        whitespace-no-wrap focus:shadow-outline focus:outline-none
-                        text-white font-semibold py-1 px-2 mr-1 rounded">Edit</a>
-                        <form class="inline"
-                            action="{{route('paksuco.faq.destroy', $faq->id)}}"
-                            method="POST">
-                            @method("DELETE")
-                            @csrf
-                            <button class="shadow text-sm bg-red-500 hover:bg-red-400
-                            whitespace-no-wrap focus:shadow-outline focus:outline-none
-                            text-white font-semibold py-1 px-2 rounded">
-                                Delete
-                            </button>
-                        </form>
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
+            neque a nisi posuere mollis vitae vitae magna. Praesent non volutpat sem, a maximus libero.
+        </p>
+        @livewire("paksuco-table::table", ["class" => new \Paksuco\Support\Tables\FAQItemsTable()])
     </div>
 </div>
 @endsection

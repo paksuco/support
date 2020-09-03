@@ -20,7 +20,7 @@ class FAQCategory extends Model
 
     public function parent()
     {
-        return $this->belongsTo(FAQCategory::class, "parent_id", "id");
+        return $this->belongsTo(FAQCategory::class, "parent_id");
     }
 
     public function children()

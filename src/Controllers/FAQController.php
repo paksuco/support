@@ -4,6 +4,7 @@ namespace Paksuco\Support\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Paksuco\Support\Models\FAQItem;
 
@@ -16,10 +17,8 @@ class FAQController extends Controller
      */
     public function index()
     {
-        $FAQs = FAQItem::paginate(20);
         return view("support-ui::backend.index", [
             "extends" => config("support-ui.backend.template_to_extend", "layouts.app"),
-            "faqs" => $FAQs,
         ]);
     }
 
@@ -91,7 +90,7 @@ class FAQController extends Controller
         return view("support-ui::backend.form", [
             "extends" => config("support-ui.backend.template_to_extend", "layouts.app"),
             "edit" => true,
-            "faq" => $faq
+            "faq" => $faq,
         ]);
     }
 
@@ -137,5 +136,29 @@ class FAQController extends Controller
             $faq->delete();
         }
         return redirect()->route("paksuco.faqs.index")->with("sucess", "Faq has been successfully deleted.");
+    }
+
+    public function upload(Request $request)
+    {
+        $validation = Validator::make($request->all(), [
+            'file' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        if ($validation->fails()) {
+            return response()->json([
+                'message' => $validation->errors()->all(),
+            ], 400);
+        }
+
+        $image = $request->file('file');
+        $new_name = rand() . '.' . $image->getClientOriginalExtension();
+        $path = config('support-ui::backend.image_upload_folder', public_path('uploads'));
+        $image->move($path, $new_name);
+
+        $url = str_replace(public_path(), '', $path . "/" . $new_name);
+
+        return response()->json([
+            'location' => $url
+        ]);
     }
 }

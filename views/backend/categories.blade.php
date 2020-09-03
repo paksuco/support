@@ -26,7 +26,7 @@
                     "key" => "parent",
                     "model" => "parent",
                     "value" => "",
-                    "props" => ["values" => \Paksuco\Support\Models\FAQCategory::all()->pluck("title", "id")]
+                    "props" => ["values" => \Paksuco\Support\Models\FAQCategory::select(["id", "title"])->get()->pluck("title", "id")]
                 ], key("parent"))
                 <div class="text-right">
                     <button type="submit" class="mx-3 px-3 py-1 rounded shadow border bg-blue-500 border-blue-600 text-white"> Kaydet</button>

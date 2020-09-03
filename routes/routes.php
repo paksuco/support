@@ -15,6 +15,10 @@ Route::group([
         ->names("faqcategory")
         ->middleware(config("support-ui.backend.middleware", []));
 
+    Route::post("/faq/upload", "\Paksuco\Support\Controllers\FAQController@upload")
+        ->name("faq.upload")
+        ->middleware(config("support-ui.backend.middleware", []));
+
     Route::resource('/faq', "\Paksuco\Support\Controllers\FAQController")
         ->names("faq")
         ->middleware(config("support-ui.backend.middleware", []));
