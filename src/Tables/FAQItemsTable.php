@@ -118,11 +118,17 @@ class FAQItemsTable extends \Paksuco\Table\Contracts\TableSettings
 
     public static function getActions($item)
     {
-        return "<button class='mr-1 rounded px-3 py-1 bg-blue-700 text-white shadow'
-                wire:click='\$emit(\"editCategory\"," . $item->id . ")'>" . __("Edit") .
-        "</button>" .
-        "<button class='rounded px-3 py-1 bg-red-700 text-white shadow'
-                wire:click='\$emit(\"deleteCategory\"," . $item->id . ")'>" . __("Delete") .
-            "</button>";
+        return "<a href='". route("paksuco.faq.edit", $item) . "'>
+            <button type='button' class='mr-1 rounded px-3 py-1 bg-indigo-700 text-white shadow'>" .
+                __("Edit") . "
+            </button>
+        </a>
+        <form action='" . route("paksuco.faq.destroy", $item) . "' method='POST'>
+            <input name='_token'  type='hidden' value='".csrf_token()."'>
+            <input name='_method' type='hidden' value='DELETE'>
+            <button type='submit' class='rounded px-3 py-1 bg-red-700 text-white shadow'>" .
+                __("Delete") .
+            "</button>
+        </form>";
     }
 }

@@ -29,7 +29,7 @@ class FAQCategoryController extends Controller
      */
     public function create()
     {
-        // not implemented
+        // not implemented on separate page
     }
 
     /**
@@ -40,9 +40,14 @@ class FAQCategoryController extends Controller
      */
     public function store(Request $request)
     {
+        $request->merge([
+            "slug" => Str::slug($request->title ?? "")
+        ]);
+
         $request->validate([
             "title" => "required|filled",
-            "parent" => "present|nullable",
+            "slug" => "unique:faq_categories,slug,NULL,id",
+            "description" => "present"
         ]);
 
         $category = new FAQCategory();
@@ -50,11 +55,11 @@ class FAQCategoryController extends Controller
         $category->slug = Str::slug($request->title);
         $category->description = $request->description;
         $category->order = 0;
-        $category->parent_id = $request->parent ?? null;
+        $category->parent_id = $request->parent_id ?? null;
         $category->save();
 
         return redirect()->route("paksuco.faqcategory.index")
-            ->with("status", "FAQ Category successfully created.");
+            ->with("success", "FAQ Category successfully created.");
     }
 
     /**
@@ -97,26 +102,30 @@ class FAQCategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, FAQCategory $category)
     {
+        $request->merge([
+            "slug" => Str::slug($request->title ?? "")
+        ]);
+
         $request->validate([
             "title" => "required|filled",
+            "slug" => "unique:faq_categuries,faq_slug,{$category->id},id",
             "content" => "required|filled",
             "category_id" => "required|filled",
             "publish" => "required|filled",
         ]);
 
-        $faq = FAQItem::findOrFail($id);
-        $faq->faq_title = $request->title;
-        $faq->faq_content = $request->content;
-        $faq->faq_slug = Str::slug($request->title);
-        $faq->faq_excerpt = Str::limit($request->content, 200, '...');
+        $category->faq_title = $request->title;
+        $category->faq_content = $request->content;
+        $category->faq_slug = Str::slug($request->title);
+        $category->faq_excerpt = Str::limit($request->content, 200, '...');
         if ($request->publish != "0") {
-            $faq->published = $request->publish == "1" ? true : false;
+            $category->published = $request->publish == "1" ? true : false;
         }
-        $faq->save();
+        $category->save();
 
-        return redirect()->route("paksuco.faqs.index")->with("status", "success");
+        return redirect()->route("paksuco.faqcategory.index")->with("success", "Category modifications saved");
     }
 
     /**
@@ -125,12 +134,12 @@ class FAQCategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(FAQCategory $category)
     {
-        $faq = FAQItem::find($id);
-        if ($faq instanceof FAQItem) {
-            $faq->delete();
-        }
-        return redirect()->route("paksuco.faqs.index")->with("sucess", "Faq has been successfully deleted.");
+        $category->delete();
+
+        return redirect()
+            ->route("paksuco.faqcategory.index")
+            ->with("success", "Category has been successfully deleted.");
     }
 }

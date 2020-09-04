@@ -58,7 +58,7 @@ class FAQController extends Controller
         $faq->published = $request->publish == "1" ? true : false;
         $faq->save();
 
-        return redirect()->route("paksuco.faqs.index")->with("status", "success");
+        return redirect()->route("paksuco.faq.index")->with("status", "success");
     }
 
     /**
@@ -120,7 +120,7 @@ class FAQController extends Controller
         }
         $faq->save();
 
-        return redirect()->route("paksuco.faqs.index")->with("status", "success");
+        return redirect()->route("paksuco.faq.index")->with("status", "success");
     }
 
     /**
@@ -135,7 +135,7 @@ class FAQController extends Controller
         if ($faq instanceof FAQItem) {
             $faq->delete();
         }
-        return redirect()->route("paksuco.faqs.index")->with("sucess", "Faq has been successfully deleted.");
+        return redirect()->route("paksuco.faq.index")->with("sucess", "Faq has been successfully deleted.");
     }
 
     public function upload(Request $request)

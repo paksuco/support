@@ -75,13 +75,19 @@ class FAQCategoriesTable extends \Paksuco\Table\Contracts\TableSettings
         return __("(No Parent)");
     }
 
-    public static function getActions($category)
+    public static function getActions($item)
     {
-        return "<button class='mr-1 rounded px-3 py-1 bg-blue-700 text-white shadow'
-                wire:click='\$emit(\"editCategory\"," . $category->id . ")'>" . __("Edit") .
-        "</button>" .
-        "<button class='rounded px-3 py-1 bg-red-700 text-white shadow'
-                wire:click='\$emit(\"deleteCategory\"," . $category->id . ")'>" . __("Delete") .
-            "</button>";
+        return "<a href='#new_category_form'>
+            <button type='button' class='mr-1 rounded px-3 py-1 bg-indigo-700 text-white shadow' @click='editCategory({$item->id})'>" .
+                __("Edit") . "
+            </button>
+        </a>
+        <form action='" . route("paksuco.faqcategory.destroy", $item) . "' method='POST'>
+            <input name='_token'  type='hidden' value='".csrf_token()."'>
+            <input name='_method' type='hidden' value='DELETE'>
+            <button type='submit' class='rounded px-3 py-1 bg-red-700 text-white shadow'>" .
+                __("Delete") .
+            "</button>
+        </form>";
     }
 }

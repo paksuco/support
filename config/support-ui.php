@@ -8,7 +8,7 @@ return [
         "template_to_extend" => "layouts.app",
     ],
     "backend" => [
-         /**
+        /**
          * This setting defines the prefix for the package routes.
          *
          * For example if your admin page lives at /admin, the package route for
@@ -21,7 +21,10 @@ return [
         /**
          * Guards for the page
          */
-        "middleware" => ["web", "auth"],
+        "middleware" => [
+            "web" => ["web", "auth"],
+            "api" => ["auth:api"],
+        ],
 
         /**
          * Your admin template layout to extend
@@ -31,6 +34,6 @@ return [
         /**
          * Image uploads path
          */
-        "image_upload_path" => public_path('/storage/uploads')
+        "image_upload_path" => public_path('/storage/uploads'),
     ],
 ];
