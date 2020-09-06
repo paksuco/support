@@ -23,6 +23,7 @@
             interdum lacus ut sem consectetur elementum. Proin pellentesque maximus sem sed rhoncus. Cras eget
             neque a nisi posuere mollis vitae vitae magna. Praesent non volutpat sem, a maximus libero.
         </p>
+        @include("support-ui::backend.submitresults")
         @livewire("paksuco-table::table", ["class" => new \Paksuco\Support\Tables\FAQItemsTable()])
     </div>
 </div>

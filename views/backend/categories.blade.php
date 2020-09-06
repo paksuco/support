@@ -1,43 +1,50 @@
 @extends($extends)
 @section("content")
 <div class="flex min-h-screen border-t">
-    <div class="w-1/4 p-6">
-        <h2 class="text-xl leading-6 font-semibold">Add New FAQ Category</h2>
-        <div class="-mx-3 mt-3">
-            <form action="{{route('paksuco.faqcategory.store')}}" method="POST" id="new_category_form">
-                @csrf
-                @livewire("paksuco-settings::textinput", [
-                "title" => "Category Name",
-                "key" => "title",
-                "model" => "title",
-                "value" => ""
-                ], key("title"))
-                @livewire("paksuco-settings::textarea", [
-                "title" => "Description",
-                "key" => "description",
-                "model" => "description",
-                "value" => "",
-                "props" => [
-                "rows" => 5
-                ]
-                ], key("description"))
-                @livewire("paksuco-settings::selectinput", [
-                "title" => "Parent Category",
-                "key" => "parent_id",
-                "model" => "parent_id",
-                "value" => "",
-                "props" => ["values" => \Paksuco\Support\Models\FAQCategory::select(["id",
-                "title"])->get()->pluck("title", "id")]
-                ], key("parent"))
-                <div class="text-right">
-                    <button type="submit"
-                            class="mx-3 px-3 py-1 rounded shadow border bg-blue-500 border-blue-600 text-white">
-                        Kaydet</button>
-                </div>
-            </form>
-        </div>
+    <div class="w-60 flex-shrink-0 p-2 pt-6">
+        <form action="{{route('paksuco.faqcategory.store')}}"
+            method="POST"
+            id="new_category_form"
+            x-data="{}">
+            <h2 class="mx-3 mb-3 text-xl leading-6 font-semibold add_form_visible">Add New FAQ Category</h2>
+            <h2 class="mx-3 mb-3 text-xl leading-6 font-semibold edit_form_visible hidden">Edit FAQ Category</h2>
+
+            <input type="hidden" name="_method" value="POST" id="category_submit_type">
+            <input type="hidden" name="id" value="" id="category_submit_id">
+            @csrf
+            @livewire("paksuco-settings::textinput", [
+            "title" => "Category Name",
+            "key" => "title",
+            "model" => "",
+            "value" => ""
+            ], key("title"))
+            @livewire("paksuco-settings::textarea", [
+            "title" => "Description",
+            "key" => "description",
+            "model" => "",
+            "value" => "",
+            "props" => [
+            "rows" => 5
+            ]
+            ], key("description"))
+            @livewire("paksuco-settings::selectinput", [
+            "title" => "Parent Category",
+            "key" => "parent_id",
+            "model" => "",
+            "value" => "",
+            "props" => ["values" => \Paksuco\Support\Models\FAQCategory::select(["id",
+            "title"])->get()->pluck("title", "id")]
+            ], key("parent"))
+            <div class="text-right">
+                <button type="button"
+                    class="edit_form_visible mr-1 px-3 py-1 rounded shadow border hidden bg-white border-gray-100 text-gray-800"
+                    onclick="resetForm(this)">Vazgeç</button>
+                <button type="submit"
+                    class="px-3 mr-3 py-1 rounded shadow border bg-blue-500 border-blue-600 text-white">Kaydet</button>
+            </div>
+        </form>
     </div>
-    <div class="w-3/4 bg-white shadow-lg p-6">
+    <div class="flex-1 bg-white shadow-lg p-6">
         <div class="w-full items-end">
             @include("support-ui::backend.submitresults")
             <div class="flex">
@@ -75,8 +82,27 @@
         })
         .then( response => response.json())
         .then((data) => {
-            console.log(data);
+            var form = document.querySelector("#new_category_form");
+            form.action = "{{route('paksuco.faqcategory.index')}}/"+data.id;
+            form.querySelector("[name='_method']").value = "PUT";
+            form.querySelector("[name='id']").value = data.id;
+            form.querySelector("[x-ref='title']").value = data.title;
+            form.querySelector("[x-ref='description']").innerText = data.description;
+            form.querySelector("[x-ref='parent_id']").value = data.parent_id;
+            form.querySelectorAll(".edit_form_visible").forEach( i => i.classList.remove("hidden"));
+            form.querySelectorAll(".add_form_visible").forEach( i => i.classList.add("hidden"));
         });
+    };
+    var resetForm = function(){
+        var form = document.querySelector("#new_category_form");
+            form.querySelector("[name='_method']").value = "POST";
+            form.action = "{{route('paksuco.faqcategory.store')}}";
+            form.querySelector("[name='id']").value = "";
+            form.querySelector("[x-ref='title']").value = "";
+            form.querySelector("[x-ref='description']").innerText = "";
+            form.querySelector("[x-ref='parent_id']").value = "";
+            form.querySelectorAll(".edit_form_visible").forEach( i => i.classList.add("hidden"));
+            form.querySelectorAll(".add_form_visible").forEach( i => i.classList.remove("hidden"));
     };
 </script>
 @endsection

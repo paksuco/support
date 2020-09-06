@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Paksuco\Support\Models\FAQCategory;
 use Paksuco\Support\Models\FAQItem;
 
 class FAQController extends Controller
@@ -32,6 +33,7 @@ class FAQController extends Controller
         return view("support-ui::backend.form", [
             "extends" => config("support-ui.backend.template_to_extend", "layouts.app"),
             "edit" => false,
+            "categories" => FAQCategory::all()
         ]);
     }
 
@@ -46,19 +48,23 @@ class FAQController extends Controller
         $request->validate([
             "title" => "required|filled",
             "content" => "required|filled",
-            "category_id" => "required|filled",
+            "category_id" => "present",
             "publish" => "required|filled",
         ]);
 
         $faq = new FAQItem();
-        $faq->faq_title = $request->title;
-        $faq->faq_content = $request->content;
-        $faq->faq_slug = Str::slug($request->title);
-        $faq->faq_excerpt = Str::limit($request->content, 200, '...');
+        $faq->category_id = $category_id ?? null;
+        $faq->question = $request->title;
+        $faq->slug = Str::slug($request->title);
+        $faq->answer = $request->content;
         $faq->published = $request->publish == "1" ? true : false;
+        $faq->order = 0;
+        $faq->likes = 0;
+        $faq->dislikes = 0;
+        $faq->visits = 0;
         $faq->save();
 
-        return redirect()->route("paksuco.faq.index")->with("status", "success");
+        return redirect()->route("paksuco.faq.index")->with("success", "FAQ Item has been successfully created.");
     }
 
     /**
@@ -83,14 +89,13 @@ class FAQController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(FAQItem $item)
     {
-        $faq = FAQItem::findOrFail($id);
-
+        dd($item);
         return view("support-ui::backend.form", [
             "extends" => config("support-ui.backend.template_to_extend", "layouts.app"),
             "edit" => true,
-            "faq" => $faq,
+            "faq" => $item,
         ]);
     }
 
@@ -101,7 +106,7 @@ class FAQController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, FAQItem $faq)
     {
         $request->validate([
             "title" => "required|filled",
@@ -110,17 +115,15 @@ class FAQController extends Controller
             "publish" => "required|filled",
         ]);
 
-        $faq = FAQItem::findOrFail($id);
-        $faq->faq_title = $request->title;
-        $faq->faq_content = $request->content;
-        $faq->faq_slug = Str::slug($request->title);
-        $faq->faq_excerpt = Str::limit($request->content, 200, '...');
+        $faq->question = $request->title;
+        $faq->answer = $request->content;
+        $faq->slug = Str::slug($request->title);
         if ($request->publish != "0") {
             $faq->published = $request->publish == "1" ? true : false;
         }
         $faq->save();
 
-        return redirect()->route("paksuco.faq.index")->with("status", "success");
+        return redirect()->route("paksuco.faq.index")->with("success", "FAQ Item successfully updated");
     }
 
     /**

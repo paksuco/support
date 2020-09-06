@@ -2,6 +2,7 @@
 
 namespace Paksuco\Support\Tables;
 
+use Illuminate\Support\Str;
 use Paksuco\Support\Models\FAQCategory;
 use Paksuco\Support\Models\FAQItem;
 
@@ -27,24 +28,24 @@ class FAQItemsTable extends \Paksuco\Table\Contracts\TableSettings
         [
             "name" => "category",
             "type" => "callback",
-            "format" => FAQItemTable::class . "::getCategoryTitle",
+            "format" => FAQItemsTable::class . "::getCategoryTitle",
             "sortable" => true,
             "queryable" => true,
             "filterable" => true,
         ],
         [
-            "name" => 'title',
+            "name" => 'question',
             "type" => "field",
+            "class" => "w-full bg-gray-50",
             "format" => "string",
             "sortable" => true,
             "queryable" => true,
             "filterable" => false,
         ],
         [
-            "name" => "excerpt",
-            "type" => "field",
-            "format" => "string",
-            "class" => "w-full bg-gray-50",
+            "name" => "answer",
+            "type" => "callback",
+            "format" => FAQItemsTable::class . "::getExcerpt",
             "sortable" => true,
             "queryable" => true,
             "filterable" => false,
@@ -66,7 +67,7 @@ class FAQItemsTable extends \Paksuco\Table\Contracts\TableSettings
             "filterable" => false,
         ],
         [
-            "name" => "views",
+            "name" => "visits",
             "type" => "field",
             "format" => "string",
             "sortable" => true,
@@ -106,6 +107,11 @@ class FAQItemsTable extends \Paksuco\Table\Contracts\TableSettings
             "filterable" => false,
         ],
     ];
+
+    public static function getExcerpt($item)
+    {
+        return wordwrap(Str::limit(strip_tags($item->answer), 100), 35, "<br>");
+    }
 
     public static function getCategoryTitle($item)
     {

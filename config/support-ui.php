@@ -22,8 +22,14 @@ return [
          * Guards for the page
          */
         "middleware" => [
-            "web" => ["web", "auth"],
-            "api" => ["auth:api"],
+            "web" => [
+                "guest" => ["web"],
+                "auth" => ["web", "auth"],
+            ],
+            "api" => [
+                "guest" => ["guest:api"],
+                "auth" => ["auth:api"],
+            ],
         ],
 
         /**

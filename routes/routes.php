@@ -6,25 +6,23 @@ use Illuminate\Support\Facades\Route;
  * Routes for the package would go here
  */
 
-$webMiddleware = config("support-ui.backend.middleware.web", ["web", "auth"]);
-$apiMiddleware = config("support-ui.backend.middleware.api", ["auth:api"]);
-
 Route::group([
     'layout' => config("support-ui.backend.template_to_extend", "layouts.app"),
     'prefix' => config("support-ui.backend.admin_route_prefix", ""),
+    'middleware' => config("support-ui.backend.middleware.web.auth"),
     'as' => 'paksuco.',
-], function () use ($webMiddleware, $apiMiddleware) {
+], function () {
     Route::resource('/faq/categories', "\Paksuco\Support\Controllers\FAQCategoryController")
-        ->names("faqcategory")->middleware($webMiddleware);
+        ->names("faqcategory");
     Route::post("/faq/upload", "\Paksuco\Support\Controllers\FAQController@upload")
-        ->name("faq.upload")->middleware($webMiddleware);
+        ->name("faq.upload");
     Route::resource('/faq', "\Paksuco\Support\Controllers\FAQController")
-        ->names("faq")->middleware($webMiddleware);
+        ->names("faq");
 });
 
 Route::group([
     'prefix' => 'api',
-    'middleware' => $apiMiddleware
+    'middleware' => config("support-ui.backend.middleware.api.guest"),
 ], function () {
     Route::apiResources([
         'faq' => \Paksuco\Support\API\FaqItemEndpoint::class,

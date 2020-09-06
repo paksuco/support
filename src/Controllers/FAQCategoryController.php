@@ -102,30 +102,30 @@ class FAQCategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, FAQCategory $category)
+    public function update(Request $request, $id)
     {
         $request->merge([
             "slug" => Str::slug($request->title ?? "")
         ]);
 
         $request->validate([
+            "id" => "required|exists:faq_categories,id",
             "title" => "required|filled",
-            "slug" => "unique:faq_categuries,faq_slug,{$category->id},id",
-            "content" => "required|filled",
-            "category_id" => "required|filled",
-            "publish" => "required|filled",
+            "slug" => "unique:faq_categories,slug,$id,id",
+            "description" => "present",
+            "parent_id" => "present|not_in:$id"
         ]);
 
-        $category->faq_title = $request->title;
-        $category->faq_content = $request->content;
-        $category->faq_slug = Str::slug($request->title);
-        $category->faq_excerpt = Str::limit($request->content, 200, '...');
-        if ($request->publish != "0") {
-            $category->published = $request->publish == "1" ? true : false;
-        }
+        $category = FAQCategory::find($id);
+        $category->title = $request->title;
+        $category->slug = Str::slug($request->title);
+        $category->description = $request->description;
+        $category->order = 0;
+        $category->parent_id = $request->parent_id ?? null;
         $category->save();
 
-        return redirect()->route("paksuco.faqcategory.index")->with("success", "Category modifications saved");
+        return redirect()->route("paksuco.faqcategory.index")
+            ->with("success", "FAQ Category successfully updated.");
     }
 
     /**
