@@ -46,7 +46,13 @@ class FAQController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            "title" => "required|filled",
+            "title" => "required|filled"
+        ]);
+
+        $request->merge(["slug" => Str::slug($request->title)]);
+
+        $request->validate([
+            "slug" => "unique:faq_items,slug,NULL,id",
             "content" => "required|filled",
             "category_id" => "present",
             "publish" => "required|filled",
@@ -73,10 +79,8 @@ class FAQController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(FAQItem $faq)
     {
-        $faq = FAQItem::findOrFail($id);
-
         return view("support-ui::frontend.show", [
             "faq" => $faq,
             "extends" => config("support-ui.frontend.template_to_extend", "layouts.app"),
@@ -89,13 +93,13 @@ class FAQController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(FAQItem $item)
+    public function edit(FAQItem $faq)
     {
-        dd($item);
         return view("support-ui::backend.form", [
             "extends" => config("support-ui.backend.template_to_extend", "layouts.app"),
             "edit" => true,
-            "faq" => $item,
+            "faq" => $faq,
+            "categories" => FAQCategory::all()
         ]);
     }
 
@@ -109,9 +113,15 @@ class FAQController extends Controller
     public function update(Request $request, FAQItem $faq)
     {
         $request->validate([
-            "title" => "required|filled",
+            "title" => "required|filled"
+        ]);
+
+        $request->merge(["slug" => Str::slug($request->title)]);
+
+        $request->validate([
+            "slug" => "unique:faq_items,slug,".$faq->id.",id",
             "content" => "required|filled",
-            "category_id" => "required|filled",
+            "category_id" => "present",
             "publish" => "required|filled",
         ]);
 
@@ -132,13 +142,10 @@ class FAQController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(FAQItem $faq)
     {
-        $faq = FAQItem::find($id);
-        if ($faq instanceof FAQItem) {
-            $faq->delete();
-        }
-        return redirect()->route("paksuco.faq.index")->with("sucess", "Faq has been successfully deleted.");
+        $faq->delete();
+        return redirect()->route("paksuco.faq.index")->with("success", "FAQ Item has been successfully deleted");
     }
 
     public function upload(Request $request)

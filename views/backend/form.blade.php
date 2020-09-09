@@ -33,14 +33,17 @@
                 </div>
             </div>
             <input type="text" name="title" placeholder="@lang('Enter Title')"
-                class="border rounded-sm shadow-inner w-full text-2xl p-2 px-4 mb-3" value="{{$edit ? $faq->question : ''}}">
+                class="border rounded-sm shadow-inner w-full text-2xl p-2 px-4 mb-3" value="{{$edit ? (old("title") ?? $faq->question) : old("title")}}">
             <select name="category_id" class="border rounded-sm shadow-inner w-full text-xl p-2 px-4 mb-3">
                 <option value="">@lang("- Select a Category -")</option>
                 @foreach ($categories as $category)
-                    <option value="{{$category->id}}" @if($edit && $faq->category_id == $category->id) selected @endif >{{$category->title}}</option>
+                    <option value="{{$category->id}}"
+                        @if($edit && $faq->category_id == (old("category_id") ?? $category->id)) selected @endif
+                        @if($edit == false && $faq->category_id == old("category_id")) selected @endif
+                        >{{$category->title}}</option>
                 @endforeach
             </select>
-            <textarea id="mytextarea" name="content" class="shadow">{{$edit ? $faq->answer : ''}}</textarea>
+            <textarea id="mytextarea" name="content" class="shadow">{{$edit ? (old("content") ?? $faq->answer) : old("content")}}</textarea>
         </div>
     </form>
 </div>
