@@ -41,5 +41,10 @@ return [
          * Image uploads path
          */
         "image_upload_path" => public_path('/storage/uploads'),
+
+        /**
+         * If you're using Paksuco/Menu, you can set the priority here
+         */
+        'menu_priority' => 30,
     ],
 ];

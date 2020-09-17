@@ -35,7 +35,7 @@ class SupportServiceProvider extends ServiceProvider
                         $menu->addItem("Support Tickets", "#", "fas fa-envelope-open-text")
                             ->addItem("Frequently Asked Questions", route("paksuco.faq.index"), "fas fa-question")
                             ->addItem("FAQ Categories", route("paksuco.faqcategory.index"), "fas fa-question-circle");
-                    });
+                    }, config("permission-ui.menu_priority", 30));
                 }
             }
         });
