@@ -33,7 +33,8 @@ class FAQController extends Controller
         return view("support-ui::backend.form", [
             "extends" => config("support-ui.backend.template_to_extend", "layouts.app"),
             "edit" => false,
-            "categories" => FAQCategory::all()
+            "categories" => FAQCategory::all(),
+            "faq" => null
         ]);
     }
 
@@ -83,6 +84,20 @@ class FAQController extends Controller
     {
         return view("support-ui::frontend.show", [
             "faq" => $faq,
+            "extends" => config("support-ui.frontend.template_to_extend", "layouts.app"),
+        ]);
+    }
+
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function frontindex()
+    {
+        return view("support-ui::frontend.index", [
             "extends" => config("support-ui.frontend.template_to_extend", "layouts.app"),
         ]);
     }

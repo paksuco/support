@@ -21,6 +21,16 @@ Route::group([
 });
 
 Route::group([
+    'layout' => config("support-ui.frontend.template_to_extend", "layouts.app"),
+    'prefix' => config("support-ui.frontend.route_prefix", ""),
+    'middleware' => config("support-ui.backend.middleware.web.guest"),
+    'as' => 'paksuco.',
+], function () {
+    Route::get('/faq', "\Paksuco\Support\Controllers\FAQController@frontindex")->name("faq.home");
+});
+
+
+Route::group([
     'prefix' => 'api',
     'middleware' => config("support-ui.backend.middleware.api.guest"),
 ], function () {

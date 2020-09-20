@@ -39,7 +39,7 @@
                 @foreach ($categories as $category)
                     <option value="{{$category->id}}"
                         @if($edit && $faq->category_id == (old("category_id") ?? $category->id)) selected @endif
-                        @if($edit == false && $faq->category_id == old("category_id")) selected @endif
+                        @if($edit == false && $category->id == old("category_id")) selected @endif
                         >{{$category->title}}</option>
                 @endforeach
             </select>

@@ -124,7 +124,12 @@ class FAQItemsTable extends \Paksuco\Table\Contracts\TableSettings
 
     public static function getActions($item)
     {
-        return "<a href='". route("paksuco.faq.edit", $item) . "'>
+        return "<a href='". route("paksuco.faq.show", $item) . "'>
+            <button type='button' class='mr-1 rounded px-3 py-1 bg-blue-700 text-white shadow'>" .
+                __("Show") . "
+            </button>
+        </a>
+        <a href='". route("paksuco.faq.edit", $item) . "'>
             <button type='button' class='mr-1 rounded px-3 py-1 bg-indigo-700 text-white shadow'>" .
                 __("Edit") . "
             </button>
