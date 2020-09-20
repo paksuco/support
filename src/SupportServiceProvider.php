@@ -30,13 +30,11 @@ class SupportServiceProvider extends ServiceProvider
 
         Event::listen("paksuco.menu.beforeRender", function ($key, $container) {
             if ($key == "admin") {
-                if ($container->hasItem("Support") == false) {
-                    $container->addItem("Support", "#", "fas fa-life-ring", function ($menu) {
-                        $menu->addItem("Support Tickets", "#", "fas fa-envelope-open-text")
-                            ->addItem("Frequently Asked Questions", route("paksuco.faq.index"), "fas fa-question")
-                            ->addItem("FAQ Categories", route("paksuco.faqcategory.index"), "fas fa-question-circle");
-                    }, config("permission-ui.menu_priority", 30));
-                }
+                $container->addItem("Support", "#", "fas fa-life-ring", function ($menu) {
+                    $menu->addItem("Support Tickets", "#", "fas fa-envelope-open-text")
+                        ->addItem("Frequently Asked Questions", route("paksuco.faq.index"), "fas fa-question")
+                        ->addItem("FAQ Categories", route("paksuco.faqcategory.index"), "fas fa-question-circle");
+                }, config("permission-ui.menu_priority", 30));
             }
         });
     }
