@@ -1,25 +1,25 @@
 @extends($extends)
 @section("content")
 <div class="flex min-h-screen border-t">
-    <div class="w-60 flex-shrink-0 p-2 pt-6">
+    <div class="flex-shrink-0 p-2 pt-6 w-60">
         <form action="{{route('paksuco.faqcategory.store')}}"
             method="POST"
             id="new_category_form"
             x-data="{}">
-            <h2 class="mx-3 mb-3 text-xl leading-6 font-semibold add_form_visible">Add New FAQ Category</h2>
-            <h2 class="mx-3 mb-3 text-xl leading-6 font-semibold edit_form_visible hidden">Edit FAQ Category</h2>
+            <h2 class="mx-3 mb-3 text-xl font-semibold leading-6 add_form_visible">@lang('Add New FAQ Category')</h2>
+            <h2 class="hidden mx-3 mb-3 text-xl font-semibold leading-6 edit_form_visible">@lang('Edit FAQ Category')</h2>
 
             <input type="hidden" name="_method" value="POST" id="category_submit_type">
             <input type="hidden" name="id" value="" id="category_submit_id">
             @csrf
             @livewire("paksuco-settings::textinput", [
-            "title" => "Category Name",
+            "title" => __("Category Name"),
             "key" => "title",
             "model" => "",
             "value" => ""
             ], key("title"))
             @livewire("paksuco-settings::textarea", [
-            "title" => "Description",
+            "title" => __("Description"),
             "key" => "description",
             "model" => "",
             "value" => "",
@@ -28,7 +28,7 @@
             ]
             ], key("description"))
             @livewire("paksuco-settings::selectinput", [
-            "title" => "Parent Category",
+            "title" => __("Parent Category"),
             "key" => "parent_id",
             "model" => "",
             "value" => "",
@@ -37,25 +37,24 @@
             ], key("parent"))
             <div class="text-right">
                 <button type="button"
-                    class="edit_form_visible mr-1 px-3 py-1 rounded shadow border hidden bg-white border-gray-100 text-gray-800"
-                    onclick="resetForm(this)">Vazgeç</button>
-                <button type="submit"
-                    class="px-3 mr-3 py-1 rounded shadow border bg-blue-500 border-blue-600 text-white">Kaydet</button>
+                    class="hidden px-3 py-1 mr-1 text-gray-800 bg-white border border-gray-100 rounded shadow edit_form_visible"
+                    onclick="resetForm(this)">@lang('Cancel')</button>
+                <button type="submit" class="px-3 py-1 mr-3 text-white bg-blue-500 border border-blue-600 rounded shadow">@lang('Save')</button>
             </div>
         </form>
     </div>
-    <div class="flex-1 bg-white shadow-lg p-6">
-        <div class="w-full items-end">
+    <div class="flex-1 p-6 bg-white shadow-lg">
+        <div class="items-end w-full">
             @include("support-ui::backend.submitresults")
             <div class="flex">
                 <div class="w-2/3">
-                    <h2 class="text-3xl font-semibold mb-3" style="line-height: 1em">@lang("FAQ Categories")</h2>
+                    <h2 class="mb-3 text-3xl font-semibold" style="line-height: 1em">@lang("FAQ Categories")</h2>
                 </div>
                 <div class="w-1/3 text-right">
                     &nbsp;
                 </div>
             </div>
-            <p class="text-gray-600 font-light leading-5 mb-4 text-sm">Lorem ipsum dolor sit amet, consectetur
+            <p class="mb-4 text-sm font-light leading-5 text-gray-600">Lorem ipsum dolor sit amet, consectetur
                 adipiscing elit. Proin interdum urna sit amet lorem iaculis, aliquet suscipit sapien venenatis.
                 Sed congue vitae velit vitae varius. Mauris egestas consequat mauris sit amet mollis. Proin porta
                 tortor in urna tincidunt vehicula. Integer urna nulla, porttitor ac imperdiet eu, mattis vel lacus.
