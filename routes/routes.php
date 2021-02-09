@@ -30,7 +30,7 @@ Route::group([
 });
 
 
-Route::group([
+/*Route::group([
     'prefix' => 'api',
     'middleware' => config("support-ui.backend.middleware.api.guest"),
 ], function () {
@@ -38,4 +38,5 @@ Route::group([
         'faq' => \Paksuco\Support\API\FaqItemEndpoint::class,
         'faqcategory' => \Paksuco\Support\API\FaqCategoryEndpoint::class,
     ]);
-});
+});*/
+
